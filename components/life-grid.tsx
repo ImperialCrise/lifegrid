@@ -186,12 +186,22 @@ export function LifeGrid({ data, onReset }: Props) {
       { name: "sports", weeks: stats.sportsWeeks, label: t.sports },
     ].sort((a, b) => b.weeks - a.weeks)
 
-    // Find first comparison where category N > category N+1
-    for (let i = 0; i < categories.length - 1; i++) {
-      if (categories[i].weeks > categories[i + 1].weeks) {
+    const familyCategory = categories.find(c => c.name === "family")
+    const familyIndex = categories.findIndex(c => c.name === "family")
+    
+    if (familyCategory && familyIndex !== -1) {
+      if (familyIndex === 0) {
         return {
-          higher: categories[i].label,
-          lower: categories[i + 1].label,
+          higher: familyCategory.label,
+          lower: categories[1].label,
+          isFamilyHigher: true
+        }
+      } else {
+        const categoryJustAbove = categories[familyIndex - 1]
+        return {
+          higher: categoryJustAbove.label,
+          lower: familyCategory.label,
+          isFamilyHigher: false
         }
       }
     }
@@ -199,6 +209,7 @@ export function LifeGrid({ data, onReset }: Props) {
     return {
       higher: categories[0].label,
       lower: categories[1].label,
+      isFamilyHigher: false
     }
   }, [stats, t])
 
@@ -207,23 +218,22 @@ export function LifeGrid({ data, onReset }: Props) {
       const scrollPosition = window.scrollY
       setScrollY(scrollPosition)
 
-      if (scrollPosition > 100) {
+      if (scrollPosition > 400) {
         setShowScrollHint(false)
       }
 
-      if (scrollPosition > 500 && !showInsight) {
+      if (scrollPosition > 4500 && !showInsight) {
         setShowInsight(true)
         setInsightPhase("stat")
 
-        // Show moral after 3 seconds
         setTimeout(() => {
           setInsightPhase("moral")
-        }, 3000)
+        }, 8000)
 
-        // Hide overlay after 6 seconds
         setTimeout(() => {
           setShowInsight(false)
-        }, 6000)
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }, 20000)
       }
     }
 
@@ -312,16 +322,23 @@ export function LifeGrid({ data, onReset }: Props) {
           <div className="absolute inset-0 bg-background/95 backdrop-blur-xl" />
           <div className="relative z-10 max-w-2xl mx-auto px-6 text-center space-y-8">
             {insightPhase === "stat" && (
-              <div className="animate-in fade-in duration-1000">
-                <p className="text-2xl md:text-4xl font-bold text-foreground leading-relaxed">
-                  {t.insightStat.replace("{higher}", insight.higher).replace("{lower}", insight.lower)}
+              <div className="animate-in fade-in duration-[3000ms] ease-out">
+                <p className="text-2xl md:text-4xl font-bold text-foreground leading-relaxed transition-all duration-[2000ms]">
+                  {insight.isFamilyHigher 
+                    ? (t as any).insightStatFamily?.replace("{lower}", insight.lower) || t.insightStat.replace("{higher}", insight.higher).replace("{lower}", insight.lower)
+                    : t.insightStat.replace("{higher}", insight.higher).replace("{lower}", insight.lower)
+                  }
                 </p>
               </div>
             )}
             {insightPhase === "moral" && (
-              <div className="animate-in fade-in duration-1000 space-y-4">
-                <p className="text-xl md:text-3xl font-semibold text-primary">{t.insightMoral1}</p>
-                <p className="text-lg md:text-2xl text-muted-foreground italic">{t.insightMoral2}</p>
+              <div className="animate-in fade-in duration-[4000ms] ease-out space-y-4">
+                <p className="text-xl md:text-3xl font-semibold text-primary transition-all duration-[3000ms]">
+                  {insight.isFamilyHigher ? (t as any).insightMoral1Family || t.insightMoral1 : t.insightMoral1}
+                </p>
+                <p className="text-lg md:text-2xl text-muted-foreground italic transition-all duration-[3000ms] delay-1000">
+                  {insight.isFamilyHigher ? (t as any).insightMoral2Family || t.insightMoral2 : t.insightMoral2}
+                </p>
               </div>
             )}
           </div>

@@ -83,8 +83,11 @@ export const translations = {
 
     // Insights
     insightStat: "Vous passez plus de temps en {higher} qu'en {lower}",
+    insightStatFamily: "Bravo ! Vous passez plus de temps en famille qu'en {lower}. Vous avez vos priorités au bon endroit ! 👨‍👩‍👧‍👦",
     insightMoral1: "Passez plus de temps en famille.",
+    insightMoral1Family: "Continuez comme ça, vous êtes sur la bonne voie !",
     insightMoral2: "On ne peut pas rajouter du temps mais on peut mieux gérer le temps qu'on nous a accordé.",
+    insightMoral2Family: "La famille, c'est ce qui compte vraiment dans la vie.",
   },
   en: {
     // Form
@@ -168,7 +171,10 @@ export const translations = {
 
     // Insights
     insightStat: "You spend more time on {higher} than {lower}",
+    insightStatFamily: "Bravo! You spend more time with family than on {lower}. You have your priorities straight! 👨‍👩‍👧‍👦",
     insightMoral1: "Spend more time with family.",
+    insightMoral1Family: "Keep it up, you're on the right track!",
     insightMoral2: "We can't add more time but we can better manage the time we've been given.",
+    insightMoral2Family: "Family is what really matters in life.",
   },
 }
