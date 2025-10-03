@@ -308,7 +308,7 @@ export function LifeGrid({ data, onReset }: Props) {
   }, [gridData, displayMode])
 
   return (
-    <div className="min-h-screen p-2 sm:p-4 md:p-6 relative">
+    <div className="p-2 sm:p-4 md:p-6 relative" style={{ minHeight: '6000px' }}>
       {showScrollHint && (
         <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-40 animate-bounce">
           <div className="bg-gray-400/30 backdrop-blur-sm rounded-full p-3">
