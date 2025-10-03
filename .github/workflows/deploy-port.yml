@@ -1,0 +1,27 @@
+name: Deploy Life
+
+on:
+  push:
+    branches: [main]
+    paths: ['**']
+
+jobs:
+  build-and-deploy:
+    runs-on: deploy-port
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - name: Deploy to development server
+      run: |
+        cd /home/ubuntu/projects/life
+        git reset --hard HEAD
+        git clean -fd
+        git fetch origin
+        git reset --hard origin/main
+        git pull
+        npm install --legacy-peer-deps
+        npm run build
+        sudo mkdir -p /var/www/privilegedlab.com/life
+        sudo rsync -av --delete ./out/ /var/www/privilegedlab.com/life/
+        sudo chown -R www-data:www-data /var/www/privilegedlab.com/life/
